@@ -1,0 +1,13 @@
+name: TreasureHunt
+main: Hunt.TreasureHunt
+version: 0.1
+description: By SecretBryan
+commands:
+  hunt:
+      description: TreasureHunt Base Command!
+      aliases: [th]
+
+permissions:
+  Hunt.admin:
+    description: Gives access to everything!
+    default: op
