@@ -7,18 +7,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import Hunt.Listeners.CommandListener;
 import Hunt.Listeners.PlayerListener;
-
  
 public final class TreasureHunt extends JavaPlugin 
 { 
 	private static TreasureHunt instance;
 	public static Logger logger = Logger.getLogger("Minecraft");
+	public static final long TASK_PERIOD = 60L*60L*2L;
 
     @Override
     public void onEnable(){
+    	instance = this;
+    	TreasureManager thm = new TreasureManager();
     	
     	try {
-			TreasureManager.instance.loadTreasureSpots();
+			TreasureManager.getInstance().loadTreasureSpots();
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,12 +28,13 @@ public final class TreasureHunt extends JavaPlugin
     	
     	this.getCommand("hunt").setExecutor(new CommandListener());
     	this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+    	this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TreasureTask(), 0L, 20L*TASK_PERIOD);
     }
  
     @Override
     public void onDisable() {
     	try {
-			TreasureManager.instance.saveTreasureSpots();
+			TreasureManager.getInstance().saveTreasureSpots();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

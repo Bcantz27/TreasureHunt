@@ -1,31 +1,29 @@
 package Hunt.Listeners;
 
-
-import java.util.logging.Level;
-
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import Hunt.TreasureHunt;
+import Hunt.TreasureManager;
 
 public class PlayerListener implements Listener
 {
 	@EventHandler(priority=EventPriority.HIGH)
-	public void onPlayerHit(EntityDamageByEntityEvent e)
+	public void onPlayerInteract(PlayerInteractEvent e)
 	{
-		final Entity ent = e.getEntity();
-		Entity damager = e.getDamager();
+		Player p = e.getPlayer();
+		Location l = e.getClickedBlock().getLocation();
 		
-		if(ent instanceof Player && damager instanceof Player)		//Pvp
+		if(l.equals(TreasureManager.currentTreasureLocation) && !TreasureManager.found && l.getBlock().getType().equals(Material.CHEST))
 		{
-			if(((Player)ent).hasPermission("PirateRevengeEssentials.navy") && ((Player)damager).hasPermission("PirateRevengeEssentials.navy"))	//Navy vs Navy
-			{
-				((Player)damager).sendMessage(ChatColor.RED + "You cant attack other navy members!");
-				e.setCancelled(true);
-			}
+			TreasureHunt.getInstance().getServer().broadcastMessage(ChatColor.GREEN + "Treasure Hunt is ending! " + p.getName() + " found the treasure chest.");
+			TreasureManager.found = true;
 		}
 	}
 }
