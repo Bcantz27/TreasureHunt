@@ -4,6 +4,9 @@ public class TreasureTask implements Runnable {
 
 	@Override
 	public void run() {
-		TreasureManager.getInstance().startTreasureHunt();
+		if(TreasureHunt.getInstance().started)
+			TreasureManager.getInstance().startTreasureHunt();
+		else
+			TreasureHunt.getInstance().started = true;
 	}
 }

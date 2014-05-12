@@ -17,10 +17,20 @@ public class PlayerListener implements Listener
 	@EventHandler(priority=EventPriority.HIGH)
 	public void onPlayerInteract(PlayerInteractEvent e)
 	{
+		if(e == null)
+			return;
+		
 		Player p = e.getPlayer();
+		
+		if(e.getClickedBlock() == null)
+			return;
+		
 		Location l = e.getClickedBlock().getLocation();
 		
-		if(l.equals(TreasureManager.currentTreasureLocation) && !TreasureManager.found && l.getBlock().getType().equals(Material.CHEST))
+		if(l == null || TreasureManager.currentTreasureLocation == null)
+			return;
+		
+		if(TreasureManager.currentTreasureLocation.compareToLoc(l) && !TreasureManager.found && l.getBlock().getType().equals(Material.CHEST))
 		{
 			TreasureHunt.getInstance().getServer().broadcastMessage(ChatColor.GREEN + "Treasure Hunt is ending! " + p.getName() + " found the treasure chest.");
 			TreasureManager.found = true;

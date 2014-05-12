@@ -13,12 +13,20 @@ public final class TreasureHunt extends JavaPlugin
 	private static TreasureHunt instance;
 	public static Logger logger = Logger.getLogger("Minecraft");
 	public static final long TASK_PERIOD = 60L*60L*2L;
+	public boolean started = false;
 
     @Override
     public void onEnable(){
     	instance = this;
     	TreasureManager thm = new TreasureManager();
     	
+		try {
+			TreasureManager.getInstance().loadPossibleTreasure();
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
     	try {
 			TreasureManager.getInstance().loadTreasureSpots();
 		} catch (ClassNotFoundException | IOException e) {
@@ -33,6 +41,14 @@ public final class TreasureHunt extends JavaPlugin
  
     @Override
     public void onDisable() {
+    	
+		try {
+			TreasureManager.getInstance().savePossibleTreasure();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
     	try {
 			TreasureManager.getInstance().saveTreasureSpots();
 		} catch (IOException e) {
